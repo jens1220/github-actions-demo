@@ -11,9 +11,10 @@ jobs:
     container:
       image: node:20
     steps:
-      - uses: actions/checkout@v3
-        with:
-          node-version: 20
+      # 1. Updated to v7 (Modern standard for performance & security)
+      - uses: actions/checkout@v7 
+        # ❌ Removed the invalid 'node-version' parameter from here
+
       - run: npm ci
       - run: npm test
       - run: npm run build
