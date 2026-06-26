@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+# Grant permissions needed to deploy to GitHub Pages
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -16,16 +20,9 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - name: Get SSH Key and set permission
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      - name: Deploy using SCP
-        run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/node-app
-
-      - name: Restart Server
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ~/node-app && npm install && pm2 restart 0"
+      # The Free Continuous Delivery Step!
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages # The branch GitHub Pages will deploy from
+          folder: dist     # The folder containing your built project files
