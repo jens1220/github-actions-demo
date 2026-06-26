@@ -1,5 +1,8 @@
 name: Deploy Project
+
 # Demo
+
+
 on:
   push:
     branches:
@@ -15,7 +18,11 @@ jobs:
     container:
       image: node:20
     steps:
+
       - uses: actions/checkout@v7
+
+      - uses: actions/checkout@v7 
+
 
       - run: npm ci
       - run: npm run build
