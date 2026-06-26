@@ -1,0 +1,28 @@
+name: Deploy Project
+# Demo
+on:
+  push:
+    branches:
+      - main
+
+# Grant permissions needed to deploy to GitHub Pages
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20
+    steps:
+      - uses: actions/checkout@v7
+
+      - run: npm ci
+      - run: npm run build
+
+      # The Free Continuous Delivery Step!
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages # The branch GitHub Pages will deploy from
+          folder: dist     # The folder containing your built project files
